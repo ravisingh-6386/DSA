@@ -1074,4 +1074,4 @@ public class graph {
         int src=0,dst=3,k=1;   
         System.out.println(cheapestFlight(n, flights, src, dst, k));
     }
-}
+}// output is 700.
