@@ -1075,3 +1075,126 @@ public class graph {
         System.out.println(cheapestFlight(n, flights, src, dst, k));
     }
 }// output is 700.
+
+
+/*Connecting Cities with Minimum Cost
+Find the minimum cost for connecting all cities on the map.
+
+cities[ ] [ ] = {(0, 1, 2, 3, 4},
+{1, 0, 5, 0, 7},
+(2, 5, 0, 6, 0},
+{3, 0, 6, 0, 0},
+(4, 7,0, 0, 0}}
+
+ans = 10 */
+import java.util.*;
+public class graph {
+    static class Edge {
+        int src;
+        int dest;
+        int wt;
+
+        public Edge(int s, int d, int w) {
+            this.src = s;
+            this.dest = d;
+            this.wt = w;
+        }
+    }
+    public static void createGraph(int cities[][], ArrayList<Edge> graph[]) {
+        for (int i = 0; i < graph.length; i++) {
+            graph[i] = new ArrayList<Edge>();
+        }
+
+        for(int i=0;i<cities.length;i++){
+            for(int j=0;j<cities[i].length;j++){
+                if(cities[i][j]!=0){
+                    Edge e=new Edge(i,j,cities[i][j]);
+                    graph[i].add(e);
+                }
+            }
+        }
+    }
+    public static int minCost(ArrayList<Edge> graph[],int V){
+        boolean vis[]=new boolean[V];
+        PriorityQueue<Edge> pq=new PriorityQueue<>((a,b)->a.wt-b.wt);
+        pq.add(new Edge(0,0,0));
+        int cost=0;
+        while(!pq.isEmpty()){
+            Edge curr=pq.remove();
+            if(!vis[curr.dest]){
+                vis[curr.dest]=true;
+                cost+=curr.wt;
+                for(int i=0;i<graph[curr.dest].size();i++){
+                    Edge e=graph[curr.dest].get(i);
+                    if(!vis[e.dest]){
+                        pq.add(e);
+                    }
+                }
+            }
+        }
+        return cost;
+    }
+    public static void main(String[] args){
+        int cities[][]={{0,1,2,3,4},{1,0,5,0,7},{2,5,0,6,0},{3,0,6,0,0},{4,7,0,0,0}};
+        int V=cities.length;
+      @SuppressWarnings("unchecked")
+      ArrayList<Edge> graph[]=new ArrayList[V];
+      createGraph(cities, graph);
+      System.out.println(minCost(graph,V));
+    }
+}
+
+// another solution.
+import java.util.*;
+public class graph{
+    static class Edge{
+        int dest;
+        int cost;
+        public Edge(int d,int c){
+            this.dest=d;
+            this.cost=c;
+        } 
+       + @Override 
+        public int compareTo(Edge e2){
+            return this.cost-e2.cost;
+        }
+    }
+    public static void connectCities(int cities[][]){
+        int V=cities.length;
+        @SuppressWarnings("unchecked")
+        ArrayList<Edge> graph[]=new ArrayList[V];
+        for(int i=0;i<V;i++){
+            graph[i]=new ArrayList<Edge>();
+        }
+        for(int i=0;i<V;i++){
+            for(int j=0;j<V;j++){
+                if(cities[i][j]!=0){
+                    graph[i].add(new Edge(j,cities[i][j]));
+                }
+            }
+        }
+        boolean vis[]=new boolean[V];
+        PriorityQueue<Edge> pq=new PriorityQueue<>((a,b)->a.cost-b.cost);
+        pq.add(new Edge(0,0));
+        int cost=0;
+        while(!pq.isEmpty()){
+            Edge curr=pq.remove();
+            if(!vis[curr.dest]){
+                vis[curr.dest]=true;
+                cost+=curr.cost;
+                for(int i=0;i<graph[curr.dest].size();i++){
+                    Edge e=graph[curr.dest].get(i);
+                    if(!vis[e.dest]){
+                        pq.add(e);
+                    }
+                }
+            }
+        }
+        System.out.println("Minimum cost to connect all cities: "+cost);
+    }
+public static void main(String[] args){
+    int cities[][]={{0,1,2,3,4},{1,0,5,0,7},{2,5,0,6,0},{3,0,6,0,0},{4,7,0,0,0}};
+   
+    }
+}
+
